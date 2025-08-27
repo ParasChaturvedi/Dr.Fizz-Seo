@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Sidebar from "./components/Sidebar";
 import Steps from "./components/Steps";
 import Step1Slide1 from "./components/Step1Slide1";
-import StepSlide2 from "./components/StepSlide2"; // FIXED: Proper import
+import StepSlide2 from "./components/StepSlide2";
 import StepSlide from "./components/StepSlide";
 import InfoPanel from "./components/InfoPanel";
 
@@ -44,7 +44,8 @@ export default function Home() {
     }
   };
 
-  const handleWebsiteSubmit = (website) => {
+  // FIXED: Use useCallback to prevent function recreation
+  const handleWebsiteSubmit = useCallback((website) => {
     console.log("Website submitted:", website);
     
     let cleanWebsite = website.toLowerCase();
@@ -62,14 +63,14 @@ export default function Home() {
       website: cleanWebsite,
       submittedAt: new Date() 
     });
-  };
+  }, []);
 
-  const handleBusinessDataSubmit = (business) => {
+  // FIXED: Use useCallback to prevent infinite loop
+  const handleBusinessDataSubmit = useCallback((business) => {
     console.log("Business data submitted:", business);
     setBusinessData(business);
-  };
+  }, []);
 
-  // FIXED: Proper Step 2 component rendering
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 1:
