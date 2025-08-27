@@ -1,103 +1,127 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import Sidebar from "./components/Sidebar";
+import Steps from "./components/Steps";
+import Step1Slide1 from "./components/Step1Slide1";
+import StepSlide2 from "./components/StepSlide2"; // FIXED: Proper import
+import StepSlide from "./components/StepSlide";
+import InfoPanel from "./components/InfoPanel";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const [isPinned, setIsPinned] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [websiteData, setWebsiteData] = useState(null);
+  const [businessData, setBusinessData] = useState(null);
+  const infoRef = useRef(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        infoRef.current &&
+        !infoRef.current.contains(event.target) &&
+        !event.target.closest("#sidebar-info-btn") &&
+        !isPinned
+      ) {
+        setIsInfoOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isPinned]);
+
+  const handleNextStep = () => {
+    if (currentStep < 5) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handleBackStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleWebsiteSubmit = (website) => {
+    console.log("Website submitted:", website);
+    
+    let cleanWebsite = website.toLowerCase();
+    if (cleanWebsite.startsWith('http://')) {
+      cleanWebsite = cleanWebsite.replace('http://', '');
+    }
+    if (cleanWebsite.startsWith('https://')) {
+      cleanWebsite = cleanWebsite.replace('https://', '');
+    }
+    if (cleanWebsite.startsWith('www.')) {
+      cleanWebsite = cleanWebsite.replace('www.', '');
+    }
+    
+    setWebsiteData({ 
+      website: cleanWebsite,
+      submittedAt: new Date() 
+    });
+  };
+
+  const handleBusinessDataSubmit = (business) => {
+    console.log("Business data submitted:", business);
+    setBusinessData(business);
+  };
+
+  // FIXED: Proper Step 2 component rendering
+  const renderCurrentStep = () => {
+    switch (currentStep) {
+      case 1:
+        return <Step1Slide1 onNext={handleNextStep} onWebsiteSubmit={handleWebsiteSubmit} />;
+      case 2:
+        return <StepSlide2 onNext={handleNextStep} onBack={handleBackStep} onBusinessDataSubmit={handleBusinessDataSubmit} />;
+      case 3:
+        return <StepSlide step={3} slide={1} onNext={handleNextStep} onBack={handleBackStep} />;
+      case 4:
+        return <StepSlide step={4} slide={1} onNext={handleNextStep} onBack={handleBackStep} />;
+      case 5:
+        return <StepSlide step={5} slide={1} onNext={handleNextStep} onBack={handleBackStep} />;
+      default:
+        return <Step1Slide1 onNext={handleNextStep} onWebsiteSubmit={handleWebsiteSubmit} />;
+    }
+  };
+
+  return (
+    <div className="flex h-screen bg-gray-100 overflow-hidden">
+      <Sidebar
+        onInfoClick={() => {
+          if (isPinned) return;
+          setIsInfoOpen((prev) => !prev);
+        }}
+      />
+
+      <InfoPanel
+        ref={infoRef}
+        isOpen={isInfoOpen}
+        isPinned={isPinned}
+        setIsPinned={setIsPinned}
+        websiteData={websiteData}
+        businessData={businessData}
+        currentStep={currentStep}
+        onClose={() => setIsInfoOpen(false)}
+      />
+
+      <main
+        className={`flex-1 h-screen bg-gray-100 transition-all duration-300 ${
+          isInfoOpen || isPinned ? "ml-[400px]" : "ml-[80px]"
+        }`}
+      >
+        <div className="w-full bg-gray-100 py-6 flex justify-center border-b border-gray-200">
+          <Steps currentStep={currentStep} />
+        </div>
+        
+        <div className="flex-1 bg-gray-100 flex items-center justify-center overflow-hidden">
+          <div className="w-full h-full flex items-center justify-center">
+            {renderCurrentStep()}
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
