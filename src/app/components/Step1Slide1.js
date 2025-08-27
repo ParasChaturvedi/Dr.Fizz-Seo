@@ -164,7 +164,7 @@ export default function Step1Slide1({ onNext, onWebsiteSubmit }) {
             <div className="bg-white shadow-md rounded-xl p-6 text-left w-full">
               <h3 className="text-xl font-bold text-gray-900 mb-4">Welcome, Sam!</h3>
               <p className="text-gray-700 text-base leading-relaxed mb-2">
-                Add your first project by entering your website and I'll build a live{" "}
+                Add your first project by entering your website and I&apos;ll build a live{" "}
                 <span className="font-bold text-gray-900">SEO dashboard</span> for you.
               </p>
               <p className="text-gray-400 text-sm">
@@ -191,7 +191,7 @@ export default function Step1Slide1({ onNext, onWebsiteSubmit }) {
               <div className="text-center space-y-8 w-full">
                 <div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-4 leading-tight">
-                    Here's your site report — take a quick look on the Info Tab.
+                    Here&apos;s your site report — take a quick look on the Info Tab.
                   </h3>
                   <p className="text-gray-600 text-base mb-8">
                     If not, you can also try a different URL?
@@ -219,7 +219,7 @@ export default function Step1Slide1({ onNext, onWebsiteSubmit }) {
             {(currentState === "submitted" || currentState === "confirmed") && (
               <div className="text-center space-y-6 w-full pt-12">
                 <p className="text-gray-600 text-base">
-                  All set? Click <span className="font-bold text-gray-900">'Next'</span> to continue.
+                  All set? Click <span className="font-bold text-gray-900">Next</span> to continue.
                 </p>
                 <button
                   onClick={handleNext}
