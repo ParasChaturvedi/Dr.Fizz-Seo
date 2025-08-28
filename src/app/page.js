@@ -5,8 +5,11 @@ import Sidebar from "./components/Sidebar";
 import Steps from "./components/Steps";
 import Step1Slide1 from "./components/Step1Slide1";
 import StepSlide2 from "./components/StepSlide2";
+import StepSlide3 from "./components/StepSlide3"; // new step3 component
+import StepSlide4 from "./components/StepSlide4"; // new step4 component
 import StepSlide from "./components/StepSlide";
 import InfoPanel from "./components/InfoPanel";
+import ThemeToggle from "./components/ThemeToggle";  // Import ThemeToggle component
 
 export default function Home() {
   const [isInfoOpen, setIsInfoOpen] = useState(false);
@@ -14,6 +17,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState(1);
   const [websiteData, setWebsiteData] = useState(null);
   const [businessData, setBusinessData] = useState(null);
+  const [languageLocationData, setLanguageLocationData] = useState(null);
   const infoRef = useRef(null);
 
   useEffect(() => {
@@ -44,10 +48,7 @@ export default function Home() {
     }
   };
 
-  // FIXED: Use useCallback to prevent function recreation
   const handleWebsiteSubmit = useCallback((website) => {
-    console.log("Website submitted:", website);
-    
     let cleanWebsite = website.toLowerCase();
     if (cleanWebsite.startsWith('http://')) {
       cleanWebsite = cleanWebsite.replace('http://', '');
@@ -58,17 +59,19 @@ export default function Home() {
     if (cleanWebsite.startsWith('www.')) {
       cleanWebsite = cleanWebsite.replace('www.', '');
     }
-    
-    setWebsiteData({ 
+
+    setWebsiteData({
       website: cleanWebsite,
-      submittedAt: new Date() 
+      submittedAt: new Date()
     });
   }, []);
 
-  // FIXED: Use useCallback to prevent infinite loop
   const handleBusinessDataSubmit = useCallback((business) => {
-    console.log("Business data submitted:", business);
     setBusinessData(business);
+  }, []);
+
+  const handleLanguageLocationSubmit = useCallback((data) => {
+    setLanguageLocationData(data);
   }, []);
 
   const renderCurrentStep = () => {
@@ -78,9 +81,9 @@ export default function Home() {
       case 2:
         return <StepSlide2 onNext={handleNextStep} onBack={handleBackStep} onBusinessDataSubmit={handleBusinessDataSubmit} />;
       case 3:
-        return <StepSlide step={3} slide={1} onNext={handleNextStep} onBack={handleBackStep} />;
+        return <StepSlide3 onNext={handleNextStep} onBack={handleBackStep} onLanguageLocationSubmit={handleLanguageLocationSubmit} />;
       case 4:
-        return <StepSlide step={4} slide={1} onNext={handleNextStep} onBack={handleBackStep} />;
+        return <StepSlide4 onNext={handleNextStep} onBack={handleBackStep} />;
       case 5:
         return <StepSlide step={5} slide={1} onNext={handleNextStep} onBack={handleBackStep} />;
       default:
@@ -89,7 +92,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 overflow-hidden">
+    <div className="flex h-screen bg-gray-100 overflow-hidden relative">
       <Sidebar
         onInfoClick={() => {
           if (isPinned) return;
@@ -104,9 +107,13 @@ export default function Home() {
         setIsPinned={setIsPinned}
         websiteData={websiteData}
         businessData={businessData}
+        languageLocationData={languageLocationData}
         currentStep={currentStep}
         onClose={() => setIsInfoOpen(false)}
       />
+
+      {/* Theme toggle button - globally visible */}
+      <ThemeToggle />
 
       <main
         className={`flex-1 h-screen bg-gray-100 transition-all duration-300 ${
@@ -116,7 +123,7 @@ export default function Home() {
         <div className="w-full bg-gray-100 py-6 flex justify-center border-b border-gray-200">
           <Steps currentStep={currentStep} />
         </div>
-        
+
         <div className="flex-1 bg-gray-100 flex items-center justify-center overflow-hidden">
           <div className="w-full h-full flex items-center justify-center">
             {renderCurrentStep()}

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { Pin, PinOff } from "lucide-react";
 
-export default function InfoPanel({ isOpen, onClose, isPinned, setIsPinned, websiteData, businessData, currentStep }) {
+export default function InfoPanel({ isOpen, onClose, isPinned, setIsPinned, websiteData, businessData, languageLocationData, currentStep }) {
   const panelRef = useRef(null);
 
   // Outside-click closes panel when not pinned
@@ -234,7 +234,7 @@ export default function InfoPanel({ isOpen, onClose, isPinned, setIsPinned, webs
         </div>
 
         {/* Business Type Impact */}
-        <div className="bg-white rounded-lg border shadow-sm p-3">
+        <div className="bg-white rounded-lg border shadow-sm p-3 mb-4">
           <div className="flex items-start justify-between mb-2">
             <div>
               <div className="text-sm font-semibold text-gray-800">Business Type Impact</div>
@@ -252,6 +252,175 @@ export default function InfoPanel({ isOpen, onClose, isPinned, setIsPinned, webs
             <div className="text-gray-400">⋯</div>
           </div>
         </div>
+
+        {/* Additional Step 2 Content */}
+        <div className="bg-white rounded-lg border shadow-sm p-3 mb-4">
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <div className="text-sm font-semibold text-gray-800">Competitive Analysis</div>
+              <div className="text-xs text-gray-500 mt-1">• Compare with industry leaders</div>
+              <div className="text-xs text-gray-500">• Identify content gaps</div>
+            </div>
+            <div className="text-gray-400 cursor-help">?</div>
+          </div>
+
+          <div className="flex items-center gap-3 mt-3">
+            <div className="w-12 h-8 rounded bg-purple-600 flex items-center justify-center text-white text-xs font-bold">
+              CA
+            </div>
+            <div className="text-sm text-gray-700">Competitor Research Tools</div>
+            <div className="text-gray-400">⋯</div>
+          </div>
+        </div>
+
+        {/* More Step 2 Content */}
+        <div className="bg-white rounded-lg border shadow-sm p-3">
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <div className="text-sm font-semibold text-gray-800">Content Strategy</div>
+              <div className="text-xs text-gray-500 mt-1">• Industry-specific content ideas</div>
+              <div className="text-xs text-gray-500">• Content calendar planning</div>
+              <div className="text-xs text-gray-500">• SEO optimization tips</div>
+            </div>
+            <div className="text-gray-400 cursor-help">?</div>
+          </div>
+
+          <div className="flex items-center gap-3 mt-3">
+            <div className="w-12 h-8 rounded bg-indigo-600 flex items-center justify-center text-white text-xs font-bold">
+              CS
+            </div>
+            <div className="text-sm text-gray-700">Content Planning Guide</div>
+            <div className="text-gray-400">⋯</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // NEW: Step 3 Content - Language & Location specific (EXACT from Image 4)
+  const renderStep3Content = () => (
+    <div className="space-y-6">
+      {/* Website + Language/Location Data */}
+      <div className="bg-white rounded-lg p-4 shadow-sm border">
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-xs text-gray-600 font-medium">WEBSITE :</div>
+          <div className="flex items-center gap-2">
+            <div className="text-sm font-medium text-gray-800">{displayWebsite}</div>
+            <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">Good</span>
+          </div>
+        </div>
+
+        {/* Language/Location Data Section */}
+        {languageLocationData && languageLocationData.selections && (
+          <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+            <div className="text-xs text-gray-600 font-medium mb-2">Language & Location:</div>
+            <div className="space-y-1">
+              {languageLocationData.selections.map((selection, index) => (
+                <div key={index} className="text-xs text-gray-600">
+                  <span className="font-medium">{selection.language}</span> - {selection.location}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-3 gap-3">
+          <div className="bg-white px-3 py-3 rounded shadow-sm text-center border">
+            <div className="flex items-center justify-center gap-1 mb-1">
+              <div className="text-xl font-bold text-gray-800">{stats.domainAuthority}</div>
+              <div className="text-gray-400">↓</div>
+            </div>
+            <div className="text-xs text-gray-500 mb-1">Domain Authority</div>
+            <div className="text-xs text-gray-400">3445</div>
+          </div>
+          <div className="bg-white px-3 py-3 rounded shadow-sm text-center border">
+            <div className="flex items-center justify-center gap-1 mb-1">
+              <div className="text-xl font-bold text-gray-800">{stats.organicTraffic}</div>
+              <div className="text-gray-400">↓</div>
+            </div>
+            <div className="text-xs text-gray-500 mb-1">Organic Traffic</div>
+            <div className="text-xs text-gray-400">29</div>
+          </div>
+          <div className="bg-white px-3 py-3 rounded shadow-sm text-center border">
+            <div className="flex items-center justify-center gap-1 mb-1">
+              <div className="text-xl font-bold text-gray-800">{stats.organicKeyword}</div>
+              <div className="text-gray-400">↓</div>
+            </div>
+            <div className="text-xs text-gray-500 mb-1">Organic Keyword</div>
+            <div className="text-xs text-gray-400">29</div>
+          </div>
+        </div>
+      </div>
+
+      {/* FIX THIS section for Step 3 - EXACT from Image 4 */}
+      <div>
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-4 h-4 bg-orange-500 rounded-sm flex items-center justify-center">
+            <span className="text-white text-xs">!</span>
+          </div>
+          <h4 className="text-sm font-bold text-gray-800">FIX THIS</h4>
+        </div>
+
+        {/* Local SEO Power - EXACT from Image */}
+        <div className="bg-white rounded-lg border shadow-sm p-3 mb-4">
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <div className="text-sm font-semibold text-gray-800">Local SEO Power</div>
+              <div className="text-xs text-gray-500 mt-1">76% of local searches lead to store visits</div>
+            </div>
+            <div className="text-gray-400 cursor-help">?</div>
+          </div>
+
+          <div className="flex items-center gap-3 mt-3">
+            <div className="w-12 h-8 rounded bg-red-600 flex items-center justify-center text-white text-xs font-bold">
+              DA
+            </div>
+            <div className="text-sm text-gray-700">Dominate Local Search</div>
+            <div className="text-gray-400">⋯</div>
+          </div>
+        </div>
+
+        {/* Language Strategy - EXACT from Image */}
+        <div className="bg-white rounded-lg border shadow-sm p-3 mb-4">
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <div className="text-sm font-semibold text-gray-800">Language Strategy</div>
+              <div className="text-xs text-gray-500 mt-1">• Match customers&apos; search language</div>
+            </div>
+            <div className="text-gray-400 cursor-help">?</div>
+          </div>
+
+          <div className="mb-3 inline-block bg-yellow-300 text-black text-xs px-3 py-1 rounded">
+            Less competition in non-English terms
+          </div>
+
+          <div className="flex items-center gap-3 mt-3">
+            <div className="w-12 h-8 rounded bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
+              SEO
+            </div>
+            <div className="text-sm text-gray-700">Multi-Language SEO</div>
+            <div className="text-gray-400">⋯</div>
+          </div>
+        </div>
+
+        {/* Location Guide - EXACT from Image */}
+        <div className="bg-white rounded-lg border shadow-sm p-3">
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <div className="text-sm font-semibold text-gray-800">Location Guide</div>
+              <div className="text-xs text-gray-500 mt-1">• Map service areas</div>
+            </div>
+            <div className="text-gray-400 cursor-help">?</div>
+          </div>
+
+          <div className="flex items-center gap-3 mt-3">
+            <div className="w-12 h-8 rounded bg-green-600 flex items-center justify-center text-white text-xs font-bold">
+              LG
+            </div>
+            <div className="text-sm text-gray-700">Location Optimization</div>
+            <div className="text-gray-400">⋯</div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -261,12 +430,12 @@ export default function InfoPanel({ isOpen, onClose, isPinned, setIsPinned, webs
       ref={panelRef}
       aria-hidden={!isOpen}
       className={
-        "fixed left-[80px] top-0 h-full w-[320px] bg-[#f9fafb] border-r border-gray-200 shadow-md transform transition-transform duration-300 ease-in-out z-40 " +
+        "fixed left-[80px] top-0 h-screen w-[320px] bg-[#f9fafb] border-r border-gray-200 shadow-md transform transition-transform duration-300 ease-in-out z-40 flex flex-col " +
         (isOpen ? "translate-x-0" : "-translate-x-full")
       }
     >
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b bg-white">
+      {/* Header - Fixed */}
+      <div className="flex items-center justify-between px-4 py-3 border-b bg-white flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-3 h-3 bg-gray-800 rounded-sm" />
           <h3 className="text-lg font-semibold text-gray-800">INFO</h3>
@@ -281,12 +450,31 @@ export default function InfoPanel({ isOpen, onClose, isPinned, setIsPinned, webs
         </button>
       </div>
 
-      {/* Body - Dynamic content based on current step */}
-      <div className="p-4 overflow-y-auto h-full">
-        {currentStep === 1 ? renderStep1Content() : renderStep2Content()}
+      {/* FIXED: Body - Proper scrollable area with correct height calculation */}
+      <div 
+        className="flex-1 overflow-y-auto overflow-x-hidden p-4"
+        style={{
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          height: 'calc(100vh - 60px)', // Subtract header height
+        }}
+      >
+        <style jsx>{`
+          div::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
+
+        {/* Dynamic content based on current step */}
+        {currentStep === 1 ? renderStep1Content() : 
+         currentStep === 2 ? renderStep2Content() : 
+         renderStep3Content()}
         
-        {/* Footer note */}
-        <div className="text-xs text-gray-500 mt-6">Answers & tips appear here.</div>
+        {/* Footer note with extra padding */}
+        <div className="text-xs text-gray-500 mt-8 pb-6">
+          Answers & tips appear here. This is additional content to demonstrate scrolling functionality.
+          More content here to ensure proper scroll behavior is working correctly.
+        </div>
       </div>
     </div>
   );

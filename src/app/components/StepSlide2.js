@@ -1,4 +1,4 @@
-"use client";
+"use client"; 
 import { useState, useEffect, useRef } from "react";
 import { ArrowRight, ArrowLeft, ChevronDown } from "lucide-react";
 
@@ -11,12 +11,12 @@ export default function StepSlide2({ onNext, onBack, onBusinessDataSubmit }) {
   const [customIndustry, setCustomIndustry] = useState("");
   const [customCategory, setCustomCategory] = useState("");
   const containerRef = useRef(null);
-  const lastSubmittedData = useRef(null); // FIXED: Track last submitted data
+  const lastSubmittedData = useRef(null);
 
   // EXACT data from images
   const industries = [
     "Technology & Software",
-    "Healthcare & Medical", 
+    "Healthcare & Medical",
     "Retail & E-commerce",
     "Professional Services",
     "Food & Beverage",
@@ -26,14 +26,14 @@ export default function StepSlide2({ onNext, onBack, onBusinessDataSubmit }) {
 
   const offerings = [
     "Services",
-    "Products", 
+    "Products",
     "Digital/Software",
     "Hybrid - Multiple Types"
   ];
 
   const categories = [
     "Consulting & Advisory",
-    "Marketing & Advertising", 
+    "Marketing & Advertising",
     "Design & Creative",
     "Technology & IT Services",
     "Financial & Accounting",
@@ -41,25 +41,26 @@ export default function StepSlide2({ onNext, onBack, onBusinessDataSubmit }) {
     "Others"
   ];
 
-  // FIXED: Handle business data submission without infinite loop
+  // Handle business data submission without infinite loop
   useEffect(() => {
     if (selectedIndustry && selectedOffering && selectedCategory) {
-      const industryValue = selectedIndustry === "Others" ? customIndustry : selectedIndustry;
-      const categoryValue = selectedCategory === "Others" ? customCategory : selectedCategory;
-      
+      const industryValue =
+        selectedIndustry === "Others" ? customIndustry : selectedIndustry;
+      const categoryValue =
+        selectedCategory === "Others" ? customCategory : selectedCategory;
+
       if (industryValue && categoryValue) {
         setShowSummary(true);
-        
-        // FIXED: Only call callback if data actually changed
+
         const newData = {
           industry: industryValue,
-          offering: selectedOffering, 
+          offering: selectedOffering,
           category: categoryValue
         };
-        
+
         const dataString = JSON.stringify(newData);
         const lastDataString = JSON.stringify(lastSubmittedData.current);
-        
+
         if (dataString !== lastDataString && onBusinessDataSubmit) {
           lastSubmittedData.current = newData;
           onBusinessDataSubmit(newData);
@@ -70,15 +71,21 @@ export default function StepSlide2({ onNext, onBack, onBusinessDataSubmit }) {
     } else {
       setShowSummary(false);
     }
-  }, [selectedIndustry, selectedOffering, selectedCategory, customIndustry, customCategory]); // FIXED: Removed onBusinessDataSubmit from deps
+  }, [
+    selectedIndustry,
+    selectedOffering,
+    selectedCategory,
+    customIndustry,
+    customCategory
+  ]);
 
-  // Auto scroll to top when summary appears - EXACTLY like Step1
+  // Auto scroll to top when summary appears
   useEffect(() => {
     if (containerRef.current) {
       setTimeout(() => {
         containerRef.current.scrollTo({
           top: 0,
-          behavior: 'smooth'
+          behavior: "smooth"
         });
       }, 100);
     }
@@ -122,30 +129,30 @@ export default function StepSlide2({ onNext, onBack, onBusinessDataSubmit }) {
     setSelectedCategory("");
     setCustomIndustry("");
     setCustomCategory("");
-    lastSubmittedData.current = null; // FIXED: Reset tracking
+    lastSubmittedData.current = null;
   };
 
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (!event.target.closest('.dropdown-container')) {
+      if (!event.target.closest(".dropdown-container")) {
         setOpenDropdown(null);
       }
     };
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   return (
-    <div className="w-full h-full flex flex-col bg-gray-100">
-      {/* Inner Scrolling Container - EXACTLY like Step1Slide1 */}
-      <div 
+    <div className="w-full h-screen flex flex-col bg-gray-100">
+      {/* Inner Scrolling Container */}
+      <div
         ref={containerRef}
-        className="flex-1 overflow-y-auto overflow-x-hidden"
+        className="flex-1 h-full overflow-y-auto overflow-x-hidden"
         style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
+          scrollbarWidth: "none",
+          msOverflowStyle: "none"
         }}
       >
         <style jsx>{`
@@ -153,58 +160,81 @@ export default function StepSlide2({ onNext, onBack, onBusinessDataSubmit }) {
             display: none;
           }
         `}</style>
-        
-        <div className="min-h-full py-12 px-8">
-          <div className="flex flex-col items-center text-center space-y-8 max-w-4xl mx-auto">
-            
+
+        {/* FIXED: Added extra padding bottom for dropdown space */}
+        <div className="min-h-full py-12 px-8 pb-30">
+          <div className="flex flex-col items-center text-center space-y-8 max-w-4xl mx-auto relative">
             {/* Step Indicator */}
             <div className="text-gray-500 text-sm font-medium">Step - 2</div>
-            
+
             {/* Main Heading */}
             <div className="space-y-4 max-w-2xl">
-              <h1 className="text-3xl font-bold text-gray-900">Tell us about your business</h1>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Tell us about your business
+              </h1>
               <p className="text-gray-600 text-lg">
-                Pick the closest category that best describes your business. This tailors benchmarks and keyword ideas.
+                Pick the closest category that best describes your business.
+                This tailors benchmarks and keyword ideas.
               </p>
             </div>
 
-            {/* Summary Box - Show when selections made */}
+            {/* Summary Box */}
             {showSummary && (
               <div className="bg-white rounded-xl p-6 shadow-sm border max-w-2xl w-full text-left">
                 <div className="space-y-2">
                   <div className="text-gray-700">
-                    <span className="font-semibold">Industry Sector:</span> {selectedIndustry === "Others" ? customIndustry : selectedIndustry}
+                    <span className="font-semibold">Industry Sector:</span>{" "}
+                    {selectedIndustry === "Others"
+                      ? customIndustry
+                      : selectedIndustry}
                   </div>
                   <div className="text-gray-700">
-                    <span className="font-semibold">Offering Type:</span> {selectedOffering}
+                    <span className="font-semibold">Offering Type:</span>{" "}
+                    {selectedOffering}
                   </div>
                   <div className="text-gray-700">
-                    <span className="font-semibold">Category:</span> {selectedCategory === "Others" ? customCategory : selectedCategory}
+                    <span className="font-semibold">Category:</span>{" "}
+                    {selectedCategory === "Others"
+                      ? customCategory
+                      : selectedCategory}
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Dropdowns - Only show when summary is not visible */}
+            {/* Dropdowns - FIXED: Added more space for dropdown expansion */}
             {!showSummary && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl relative">
-                
-                {/* Industry Sector Dropdown */}
-                <div className="relative dropdown-container" style={{ zIndex: openDropdown === 'industry' ? 1000 : 1 }}>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl relative pb-80">
+                {/* Industry Dropdown */}
+                <div
+                  className="relative dropdown-container overflow-visible"
+                  style={{
+                    zIndex: openDropdown === "industry" ? 1000 : 1
+                  }}
+                >
                   <button
-                    onClick={() => handleDropdownToggle('industry')}
+                    onClick={() => handleDropdownToggle("industry")}
                     className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-left flex items-center justify-between hover:border-gray-400 transition-colors focus:outline-none focus:border-blue-500"
                     type="button"
                   >
-                    <span className={selectedIndustry ? "text-gray-900" : "text-gray-500"}>
+                    <span
+                      className={
+                        selectedIndustry ? "text-gray-900" : "text-gray-500"
+                      }
+                    >
                       {selectedIndustry || "Industry Sector"}
                     </span>
-                    <ChevronDown size={20} className={`transform transition-transform ${openDropdown === 'industry' ? 'rotate-180' : ''}`} />
+                    <ChevronDown
+                      size={20}
+                      className={`transform transition-transform ${
+                        openDropdown === "industry" ? "rotate-180" : ""
+                      }`}
+                    />
                   </button>
 
-                  {openDropdown === 'industry' && (
+                  {openDropdown === "industry" && (
                     <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg mt-1 shadow-2xl max-h-64 overflow-y-auto"
-                         style={{ zIndex: 1001 }}>
+                      style={{ zIndex: 1001 }}>
                       {industries.map((industry) => (
                         <button
                           key={industry}
@@ -229,25 +259,43 @@ export default function StepSlide2({ onNext, onBack, onBusinessDataSubmit }) {
                   )}
                 </div>
 
-                {/* Offering Type Dropdown */}
-                <div className="relative dropdown-container" style={{ zIndex: openDropdown === 'offering' ? 1000 : 1 }}>
+                {/* Offering Dropdown */}
+                <div
+                  className="relative dropdown-container overflow-visible"
+                  style={{
+                    zIndex: openDropdown === "offering" ? 1000 : 1
+                  }}
+                >
                   <button
-                    onClick={() => selectedIndustry ? handleDropdownToggle('offering') : null}
+                    onClick={() =>
+                      selectedIndustry ? handleDropdownToggle("offering") : null
+                    }
                     disabled={!selectedIndustry}
                     className={`w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-left flex items-center justify-between transition-colors focus:outline-none ${
-                      selectedIndustry ? 'hover:border-gray-400 cursor-pointer focus:border-blue-500' : 'opacity-50 cursor-not-allowed'
+                      selectedIndustry
+                        ? "hover:border-gray-400 cursor-pointer focus:border-blue-500"
+                        : "opacity-50 cursor-not-allowed"
                     }`}
                     type="button"
                   >
-                    <span className={selectedOffering ? "text-gray-900" : "text-gray-500"}>
+                    <span
+                      className={
+                        selectedOffering ? "text-gray-900" : "text-gray-500"
+                      }
+                    >
                       {selectedOffering || "Offering Type"}
                     </span>
-                    <ChevronDown size={20} className={`transform transition-transform ${openDropdown === 'offering' ? 'rotate-180' : ''}`} />
+                    <ChevronDown
+                      size={20}
+                      className={`transform transition-transform ${
+                        openDropdown === "offering" ? "rotate-180" : ""
+                      }`}
+                    />
                   </button>
 
-                  {openDropdown === 'offering' && selectedIndustry && (
+                  {openDropdown === "offering" && selectedIndustry && (
                     <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg mt-1 shadow-2xl max-h-64 overflow-y-auto"
-                         style={{ zIndex: 1001 }}>
+                      style={{ zIndex: 1001 }}>
                       {offerings.map((offering) => (
                         <button
                           key={offering}
@@ -263,24 +311,45 @@ export default function StepSlide2({ onNext, onBack, onBusinessDataSubmit }) {
                 </div>
 
                 {/* Category Dropdown */}
-                <div className="relative dropdown-container" style={{ zIndex: openDropdown === 'category' ? 1000 : 1 }}>
+                <div
+                  className="relative dropdown-container overflow-visible"
+                  style={{
+                    zIndex: openDropdown === "category" ? 1000 : 1
+                  }}
+                >
                   <button
-                    onClick={() => selectedOffering ? handleDropdownToggle('category') : null}
+                    onClick={() =>
+                      selectedOffering ? handleDropdownToggle("category") : null
+                    }
                     disabled={!selectedOffering}
                     className={`w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-left flex items-center justify-between transition-colors focus:outline-none ${
-                      selectedOffering ? 'hover:border-gray-400 cursor-pointer focus:border-blue-500' : 'opacity-50 cursor-not-allowed'
+                      selectedOffering
+                        ? "hover:border-gray-400 cursor-pointer focus:border-blue-500"
+                        : "opacity-50 cursor-not-allowed"
                     }`}
                     type="button"
                   >
-                    <span className={selectedCategory ? "text-gray-900" : "text-gray-500"}>
-                      {selectedCategory || `Specific Category for ${selectedOffering?.toLowerCase() || 'service'}`}
+                    <span
+                      className={
+                        selectedCategory ? "text-gray-900" : "text-gray-500"
+                      }
+                    >
+                      {selectedCategory ||
+                        `Specific Category for ${
+                          selectedOffering?.toLowerCase() || "service"
+                        }`}
                     </span>
-                    <ChevronDown size={20} className={`transform transition-transform ${openDropdown === 'category' ? 'rotate-180' : ''}`} />
+                    <ChevronDown
+                      size={20}
+                      className={`transform transition-transform ${
+                        openDropdown === "category" ? "rotate-180" : ""
+                      }`}
+                    />
                   </button>
 
-                  {openDropdown === 'category' && selectedOffering && (
+                  {openDropdown === "category" && selectedOffering && (
                     <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg mt-1 shadow-2xl max-h-64 overflow-y-auto"
-                         style={{ zIndex: 1001 }}>
+                      style={{ zIndex: 1001 }}>
                       {categories.map((category) => (
                         <button
                           key={category}
@@ -307,7 +376,7 @@ export default function StepSlide2({ onNext, onBack, onBusinessDataSubmit }) {
               </div>
             )}
 
-            {/* Report Message - Show when all selected */}
+            {/* Report Message */}
             {showSummary && (
               <div className="text-center space-y-6 w-full pt-8">
                 <div>
@@ -318,15 +387,15 @@ export default function StepSlide2({ onNext, onBack, onBusinessDataSubmit }) {
                     If not, Want to do some changes?
                   </p>
                 </div>
-                
+
                 <div className="flex gap-8 justify-center text-base">
-                  <button 
+                  <button
                     onClick={handleResetSelections}
                     className="px-0 py-3 text-gray-700 hover:text-gray-900 font-medium"
                   >
                     NO
                   </button>
-                  <button 
+                  <button
                     onClick={handleResetSelections}
                     className="px-0 py-3 text-blue-600 hover:text-blue-800 font-medium"
                   >
@@ -336,19 +405,36 @@ export default function StepSlide2({ onNext, onBack, onBusinessDataSubmit }) {
               </div>
             )}
 
-            {/* Next Section */}
+            {/* Next Section with Navigation Buttons */}
             {showSummary && (
               <div className="text-center w-full pt-8 pb-20">
-                <p className="text-gray-600 text-base">
-                  All set? Click <span className="font-bold text-gray-900">Next</span> to continue.
+                <p className="text-gray-600 text-base mb-6">
+                  All set? Click{" "}
+                  <span className="font-bold text-gray-900">Next</span> to
+                  continue.
                 </p>
+
+                <div className="flex justify-center gap-4 mt-6">
+                  <button
+                    onClick={handleBack}
+                    className="bg-white hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-full text-base font-medium flex items-center gap-2 border border-gray-300 transition-colors"
+                  >
+                    <ArrowLeft size={16} /> Back
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    className="bg-gray-700 hover:bg-gray-800 text-white px-8 py-3 rounded-full text-base font-medium flex items-center gap-2 transition-colors shadow-lg"
+                  >
+                    Next <ArrowRight size={16} />
+                  </button>
+                </div>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Navigation Buttons - ALWAYS VISIBLE */}
+      {/* Navigation Buttons - Original ones at bottom */}
       <div className="flex-shrink-0 bg-gray-100 border-t border-gray-200 p-6">
         <div className="max-w-4xl mx-auto flex justify-center gap-4">
           <button
@@ -357,7 +443,6 @@ export default function StepSlide2({ onNext, onBack, onBusinessDataSubmit }) {
           >
             <ArrowLeft size={16} /> Back
           </button>
-          
           {showSummary && (
             <button
               onClick={handleNext}
